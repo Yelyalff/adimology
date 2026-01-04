@@ -70,3 +70,33 @@ export interface ApiResponse {
   data?: StockAnalysisResult;
   error?: string;
 }
+
+export interface WatchlistItem {
+  company_id: number;
+  company_code: string; // Keeping for compatibility, might be mapped from symbol
+  symbol: string;       // New field from API
+  company_name: string;
+  last_price: number;
+  change_point: number;
+  change_percentage: number;
+  percent: string;      // Percentage from API (e.g., "-1.23")
+  volume: number;
+  frequency: number;
+}
+
+export interface WatchlistMetaResponse {
+  message: string;
+  data: {
+    watchlist_id: number;
+  };
+}
+
+export interface WatchlistDetailResponse {
+  message: string;
+  data: {
+    watchlist_id: number;
+    result: WatchlistItem[];
+  };
+}
+
+export type WatchlistResponse = WatchlistDetailResponse; // Alias for backward compatibility if needed, or just use WatchlistDetailResponse

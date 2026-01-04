@@ -1,4 +1,4 @@
-import type { MarketDetectorResponse, OrderbookResponse, BrokerData } from './types';
+import type { MarketDetectorResponse, OrderbookResponse, BrokerData, WatchlistResponse } from './types';
 
 const STOCKBIT_BASE_URL = 'https://exodus.stockbit.com';
 const STOCKBIT_AUTH_URL = 'https://stockbit.com';
@@ -71,6 +71,55 @@ export async function fetchOrderbook(emiten: string): Promise<OrderbookResponse>
   }
 
   return response.json();
+}
+
+/**
+ * Fetch Watchlist data
+ */
+export async function fetchWatchlist(): Promise<WatchlistResponse> {
+  // Step 1: Get Watchlist ID
+  const metaUrl = `${STOCKBIT_BASE_URL}/watchlist?page=1&limit=500`;
+  const metaResponse = await fetch(metaUrl, {
+    method: 'GET',
+    headers: getHeaders(),
+  });
+
+  if (!metaResponse.ok) {
+    throw new Error(`Watchlist Meta API error: ${metaResponse.status} ${metaResponse.statusText}`);
+  }
+
+  const metaJson = await metaResponse.json();
+  
+  const watchlists = Array.isArray(metaJson.data) ? metaJson.data : [metaJson.data];
+  const defaultWatchlist = watchlists.find((w: any) => w.is_default) || watchlists[0];
+  const watchlistId = defaultWatchlist?.watchlist_id;
+
+  if (!watchlistId) {
+    throw new Error(`No watchlist_id found in response: ${JSON.stringify(metaJson)}`);
+  }
+
+  // Step 2: Get Watchlist Details
+  const detailUrl = `${STOCKBIT_BASE_URL}/watchlist/${watchlistId}?page=1&limit=500`;
+  const detailResponse = await fetch(detailUrl, {
+    method: 'GET',
+    headers: getHeaders(),
+  });
+
+  if (!detailResponse.ok) {
+    throw new Error(`Watchlist Detail API error: ${detailResponse.status} ${detailResponse.statusText}`);
+  }
+
+  const detailJson = await detailResponse.json();
+
+  // Map symbol to company_code for compatibility
+  if (detailJson.data?.result) {
+    detailJson.data.result = detailJson.data.result.map((item: any) => ({
+      ...item,
+      company_code: item.symbol || item.company_code
+    }));
+  }
+
+  return detailJson;
 }
 
 /**

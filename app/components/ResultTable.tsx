@@ -8,7 +8,7 @@ interface ResultTableProps {
 }
 
 export default function ResultTable({ marketData, calculated }: ResultTableProps) {
-  const formatNumber = (num: number) => num.toLocaleString();
+  const formatNumber = (num: number | null | undefined) => num?.toLocaleString() ?? '-';
 
   return (
     <div className="grid grid-2">

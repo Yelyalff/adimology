@@ -1,17 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { StockInput } from '@/lib/types';
 
 interface InputFormProps {
   onSubmit: (data: StockInput) => void;
   loading: boolean;
+  initialEmiten?: string | null;
 }
 
-export default function InputForm({ onSubmit, loading }: InputFormProps) {
+export default function InputForm({ onSubmit, loading, initialEmiten }: InputFormProps) {
   const [emiten, setEmiten] = useState('SOCI');
   const [fromDate, setFromDate] = useState('2026-01-01');
   const [toDate, setToDate] = useState('2026-01-02');
+
+  useEffect(() => {
+    if (initialEmiten) {
+      setEmiten(initialEmiten.toUpperCase());
+    }
+  }, [initialEmiten]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

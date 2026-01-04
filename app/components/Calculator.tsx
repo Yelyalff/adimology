@@ -1,16 +1,28 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import InputForm from './InputForm';
 import BrokerCard from './BrokerCard';
 import ResultTable from './ResultTable';
 import TargetCard from './TargetCard';
 import type { StockInput, StockAnalysisResult } from '@/lib/types';
 
-export default function Calculator() {
+interface CalculatorProps {
+  selectedStock?: string | null;
+}
+
+export default function Calculator({ selectedStock }: CalculatorProps) {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<StockAnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Reset result and error when a new stock is selected from sidebar
+  useEffect(() => {
+    if (selectedStock) {
+      setResult(null);
+      setError(null);
+    }
+  }, [selectedStock]);
 
   const handleSubmit = async (data: StockInput) => {
     setLoading(true);
@@ -49,7 +61,7 @@ export default function Calculator() {
         </p>
       </div>
 
-      <InputForm onSubmit={handleSubmit} loading={loading} />
+      <InputForm onSubmit={handleSubmit} loading={loading} initialEmiten={selectedStock} />
 
       {loading && (
         <div className="text-center mt-4">
