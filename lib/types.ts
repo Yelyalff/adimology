@@ -21,8 +21,11 @@ export interface MarketDetectorResponse {
 
 export interface OrderbookData {
   close: number;
+  high: number;
   ara: { value: string };
   arb: { value: string };
+  offer: { price: string; que_num: string; volume: string; change_percentage: string }[];
+  bid: { price: string; que_num: string; volume: string; change_percentage: string }[];
   total_bid_offer: {
     bid: { lot: string };
     offer: { lot: string };
