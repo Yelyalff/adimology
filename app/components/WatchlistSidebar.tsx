@@ -14,6 +14,7 @@ export default function WatchlistSidebar({ onSelect }: WatchlistSidebarProps) {
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshSeed, setRefreshSeed] = useState(0);
 
   // Fetch groups on mount
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function WatchlistSidebar({ onSelect }: WatchlistSidebarProps) {
     fetchGroups();
   }, []);
 
-  // Fetch watchlist items when group changes
+  // Fetch watchlist items when group changes or refreshSeed changes
   useEffect(() => {
     if (!selectedGroupId) return;
 
@@ -61,7 +62,18 @@ export default function WatchlistSidebar({ onSelect }: WatchlistSidebarProps) {
     };
 
     fetchWatchlist();
-  }, [selectedGroupId]);
+  }, [selectedGroupId, refreshSeed]);
+
+  // Handle token refresh event
+  useEffect(() => {
+    const handleTokenRefresh = () => {
+      console.log('Token refreshed event received, triggering watchlist refresh');
+      setRefreshSeed(prev => prev + 1);
+    };
+
+    window.addEventListener('token-refreshed', handleTokenRefresh);
+    return () => window.removeEventListener('token-refreshed', handleTokenRefresh);
+  }, []);
 
   // Handle real-time flag updates from InputForm
   useEffect(() => {

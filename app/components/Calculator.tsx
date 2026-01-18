@@ -64,7 +64,7 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
   const [copied, setCopied] = useState(false);
   const [copiedImage, setCopiedImage] = useState(false);
   const [keyStats, setKeyStats] = useState<KeyStatsData | null>(null);
-  
+
   // Agent Story state
   const [agentStories, setAgentStories] = useState<AgentStoryResult[]>([]);
   const [storyStatus, setStoryStatus] = useState<'idle' | 'pending' | 'processing' | 'completed' | 'error'>('idle');
@@ -123,7 +123,7 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
       }
 
       setResult(json.data);
-      
+
       // Fetch KeyStats after getting result
       try {
         const keyStatsRes = await fetch(`/api/keystats?emiten=${data.emiten}`);
@@ -173,12 +173,34 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
     };
   }, []);
 
+  // Handle token refresh to auto-retry failed analysis
+  useEffect(() => {
+    const handleTokenRefresh = () => {
+      console.log('Token refreshed event received in Calculator');
+      // If there's an error that looks like a token issue, retry the last analysis
+      if (error && (error.toLowerCase().includes('token') || error.toLowerCase().includes('401'))) {
+        const emitenToRetry = selectedStock || result?.input.emiten;
+        if (emitenToRetry) {
+          console.log(`Retrying analysis for ${emitenToRetry}`);
+          handleSubmit({
+            emiten: emitenToRetry,
+            fromDate,
+            toDate
+          });
+        }
+      }
+    };
+
+    window.addEventListener('token-refreshed', handleTokenRefresh);
+    return () => window.removeEventListener('token-refreshed', handleTokenRefresh);
+  }, [error, selectedStock, result, fromDate, toDate]);
+
   const handleAnalyzeStory = async (isResuming: boolean = false) => {
     if (!result) return;
-    
+
     const emiten = result.input.emiten.toUpperCase();
     setStoryStatus('pending');
-    
+
     if (!isResuming) {
       // Don't clear existing stories when starting a new one, 
       // just add a placeholder or let the API update handle it
@@ -189,12 +211,12 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
       const response = await fetch('/api/analyze-story', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          emiten, 
+        body: JSON.stringify({
+          emiten,
           keyStats: keyStats // Pass the current keyStats data
         })
       });
-      
+
       const data = await response.json();
       if (!data.success) throw new Error(data.error);
 
@@ -203,11 +225,11 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
         try {
           const statusRes = await fetch(`/api/analyze-story?emiten=${emiten}`);
           const statusData = await statusRes.json();
-          
+
           if (statusData.success && statusData.data && Array.isArray(statusData.data)) {
             const stories = statusData.data;
             setAgentStories(stories);
-            
+
             const currentProcessing = stories[0]; // The one we just triggered is usually the first (desc order)
             if (currentProcessing.status === 'completed') {
               setStoryStatus('completed');
@@ -256,7 +278,7 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
       });
 
       // Wrap toBlob in a Promise to keep the async chain active for Safari's strict user-gesture checks
-      const blob = await new Promise<Blob | null>((resolve) => 
+      const blob = await new Promise<Blob | null>((resolve) =>
         canvas.toBlob(resolve, 'image/png')
       );
 
@@ -269,20 +291,20 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
         setTimeout(() => setCopiedImage(false), 2000);
       } catch (err) {
         console.error('Clipboard write failed:', err);
-        
+
         // 1. Fallback for iOS Safari / Mobile: Web Share API
         // This opens the native share sheet which is often preferred on mobile
         if (navigator.share && navigator.canShare) {
-            const file = new File([blob], `${result?.input.emiten || 'stock'}-analysis.png`, { type: 'image/png' });
-            if (navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                    files: [file],
-                    title: 'Stock Analysis Result',
-                });
-                return; 
-            }
+          const file = new File([blob], `${result?.input.emiten || 'stock'}-analysis.png`, { type: 'image/png' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: 'Stock Analysis Result',
+            });
+            return;
+          }
         }
-        
+
         // 2. If all else fails
         throw err;
       }
@@ -346,7 +368,7 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
             }}>
               <span style={{ fontSize: '1.2rem' }}>⚠️</span>
               <div>
-                Data broker live tidak tersedia. Menampilkan data history terakhir dari tanggal 
+                Data broker live tidak tersedia. Menampilkan data history terakhir dari tanggal
                 <strong style={{ marginLeft: '4px', color: '#ffca2c' }}>
                   {new Date(result.historyDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                 </strong>
@@ -359,8 +381,8 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
             {/* Left Column: Compact Result */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div id="compact-result-card-container">
-                <CompactResultCard 
-                  result={result} 
+                <CompactResultCard
+                  result={result}
                   onCopyText={handleCopy}
                   onCopyImage={handleCopyImage}
                   copiedText={copied}
@@ -390,9 +412,9 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
             )}
 
             {/* Price Graph + Broker Flow Section */}
-            <div style={{ 
-              gridColumn: '1 / -1', 
-              width: '100%', 
+            <div style={{
+              gridColumn: '1 / -1',
+              width: '100%',
               marginTop: '1rem',
               display: 'flex',
               gap: '1.5rem',
@@ -410,9 +432,9 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
             {/* Agent Story Section - Full Width */}
             <div style={{ gridColumn: '1 / -1', marginTop: '0', width: '100%' }}>
               {(agentStories.length > 0 || storyStatus !== 'idle') && (
-                <AgentStoryCard 
-                  stories={agentStories} 
-                  status={storyStatus} 
+                <AgentStoryCard
+                  stories={agentStories}
+                  status={storyStatus}
                   onRetry={() => handleAnalyzeStory()}
                 />
               )}

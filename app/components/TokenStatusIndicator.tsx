@@ -19,6 +19,7 @@ export default function TokenStatusIndicator() {
   const [loading, setLoading] = useState(true);
   const [showDetails, setShowDetails] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const prevIsValidRef = useRef<boolean | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -36,7 +37,15 @@ export default function TokenStatusIndicator() {
       try {
         const res = await fetch('/api/token-status');
         if (res.ok) {
-          const data = await res.json();
+          const data: TokenStatusData = await res.json();
+
+          // Check for transition from invalid/none to valid
+          if (data.isValid && prevIsValidRef.current === false) {
+            console.log('Token became valid, dispatching refresh event');
+            window.dispatchEvent(new CustomEvent('token-refreshed'));
+          }
+
+          prevIsValidRef.current = data.isValid;
           setStatus(data);
         }
       } catch (error) {
@@ -47,9 +56,18 @@ export default function TokenStatusIndicator() {
     };
 
     fetchStatus();
-    const interval = setInterval(fetchStatus, 60000);
-    return () => clearInterval(interval);
-  }, []);
+
+    // Dynamic interval: poll faster if token is invalid
+    const getInterval = () => {
+      if (!status) return 30000;
+      const isError = !status.exists || !status.isValid || status.isExpired;
+      return isError ? 5000 : 30000; // 5s if error, 30s otherwise
+    };
+
+    const intervalId = setInterval(fetchStatus, getInterval());
+
+    return () => clearInterval(intervalId);
+  }, [status?.isValid]);
 
   if (loading || !status) return null;
 
@@ -59,7 +77,7 @@ export default function TokenStatusIndicator() {
 
   return (
     <div style={{ position: 'relative' }} ref={containerRef}>
-      <div 
+      <div
         className="token-status-pill"
         onClick={() => setShowDetails(!showDetails)}
       >
@@ -75,14 +93,14 @@ export default function TokenStatusIndicator() {
             <span>Stockbit Link</span>
             <div className={`token-dot ${isError ? 'error' : isWarning ? 'warning' : 'good'}`} />
           </div>
-          
+
           <div className="token-info-row">
             <span>Status:</span>
             <span className={isError ? 'status-error' : 'status-valid'}>
               {isError ? 'Disconnected' : 'Connected'}
             </span>
           </div>
-          
+
           {status.lastUsedAt && (
             <div className="token-info-row">
               <span>Last Used:</span>
@@ -103,13 +121,13 @@ export default function TokenStatusIndicator() {
 
           <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
             <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', lineHeight: '1.4', marginBottom: '0.75rem' }}>
-              {isError 
+              {isError
                 ? 'Token has expired or is invalid. Please login to Stockbit via the extension to refresh.'
                 : 'Connection is active. Token will be automatically refreshed by the extension.'}
             </p>
-            <a 
-              href="https://stockbit.com/login" 
-              target="_blank" 
+            <a
+              href="https://stockbit.com/login"
+              target="_blank"
               rel="noopener noreferrer"
               className="token-action-btn"
             >
