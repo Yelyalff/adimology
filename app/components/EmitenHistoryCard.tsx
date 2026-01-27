@@ -121,7 +121,7 @@ export default function EmitenHistoryCard({ emiten }: EmitenHistoryCardProps) {
                 key={record.id}
                 style={{
                   borderBottom: index < data.length - 1 ? '1px solid var(--border-color)' : 'none',
-                  background: index % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)',
+                  background: index % 2 === 0 ? 'transparent' : 'var(--glass-inner-glow)',
                   transition: 'background 0.2s ease'
                 }}
               >
@@ -134,7 +134,7 @@ export default function EmitenHistoryCard({ emiten }: EmitenHistoryCardProps) {
                     </div>
                   )}
                 </td>
-                <td style={{ padding: '0.6rem 0.75rem', textAlign: 'right', fontWeight: 700, color: '#ffffff', fontVariantNumeric: 'tabular-nums', fontSize: '0.85rem' }}>
+                <td style={{ padding: '0.6rem 0.75rem', textAlign: 'right', fontWeight: 700, color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums', fontSize: '0.85rem' }}>
                   {formatNumber(record.harga)}
                 </td>
                 <td style={{ padding: '0.4rem 0.75rem', textAlign: 'right', verticalAlign: 'middle' }}>
@@ -201,7 +201,7 @@ export default function EmitenHistoryCard({ emiten }: EmitenHistoryCardProps) {
                     <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>-</span>
                   )}
                 </td>
-                <td style={{ padding: '0.6rem 0.75rem', color: '#ffffff', fontSize: '0.75rem', verticalAlign: 'middle' }}>
+                <td style={{ padding: '0.6rem 0.75rem', color: 'var(--text-primary)', fontSize: '0.75rem', verticalAlign: 'middle' }}>
                   {record.bandar ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <span style={{ fontWeight: 600 }}>{record.bandar}</span>
@@ -213,7 +213,7 @@ export default function EmitenHistoryCard({ emiten }: EmitenHistoryCardProps) {
                             fontSize: '0.75rem', 
                             color: 'var(--text-secondary)', 
                             opacity: 0.9,
-                            background: 'rgba(255,255,255,0.08)',
+                            background: 'var(--border-color)',
                             padding: '1px 4px',
                             borderRadius: '3px',
                             whiteSpace: 'nowrap'
@@ -225,11 +225,11 @@ export default function EmitenHistoryCard({ emiten }: EmitenHistoryCardProps) {
                     </div>
                   ) : '-'}
                 </td>
-                <td style={{ padding: '0.6rem 0.75rem', textAlign: 'right', color: '#ffffff', fontVariantNumeric: 'tabular-nums', fontSize: '0.8rem' }}>
+                <td style={{ padding: '0.6rem 0.75rem', textAlign: 'right', color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums', fontSize: '0.8rem' }}>
                   {formatNumber(record.barang_bandar)}
                 </td>
                 <td style={{ padding: '0.4rem 0.75rem', textAlign: 'right', verticalAlign: 'middle' }}>
-                  <div style={{ fontWeight: 700, color: '#ffffff', fontVariantNumeric: 'tabular-nums', fontSize: '0.85rem' }}>
+                  <div style={{ fontWeight: 700, color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums', fontSize: '0.85rem' }}>
                     {formatNumber(record.rata_rata_bandar)}
                   </div>
                   {record.rata_rata_bandar && record.harga && (

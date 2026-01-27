@@ -36,7 +36,7 @@ export default function CompactResultCard({
             <div>
               <div className="compact-ticker">+ {input.emiten.toUpperCase()}</div>
               {result.sector && (
-                <div style={{ fontSize: '0.7rem', color: '#999', marginTop: '2px' }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '2px' }}>
                   {result.sector}
                 </div>
               )}

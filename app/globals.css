@@ -24,8 +24,20 @@
 
   /* Accent */
   --accent-primary: #7c3aed;
+  --accent-title: #a78bfa;
   --accent-success: #38ef7d;
   --accent-warning: #f5576c;
+  --story-impact: #a78bfa;
+
+  /* Sentiment */
+  --sentiment-positive: #38ef7d;
+  --sentiment-negative: #f5576c;
+
+  /* Broker Types */
+  --broker-smartmoney: #667eea;
+  --broker-whale: #38ef7d;
+  --broker-retail: #f5576c;
+  --broker-mix: #f093fb;
 
   /* Border */
   --border-color: rgba(255, 255, 255, 0.1);
@@ -68,31 +80,45 @@
 
   /* Accent */
   --accent-primary: #7c3aed;
+  --accent-title: #7c3aed;
   --accent-success: #059669;
   --accent-warning: #dc2626;
+  --story-impact: #7c3aed;
+
+  /* Sentiment - Light Mode */
+  --sentiment-positive: #059669;
+  --sentiment-negative: #dc2626;
+
+  /* Broker Types - Light Mode */
+  --broker-smartmoney: #4f46e5;
+  --broker-whale: #059669;
+  --broker-retail: #dc2626;
+  --broker-mix: #9333ea;
 
   /* Border */
   --border-color: rgba(0, 0, 0, 0.08);
-  --glass-border: rgba(0, 0, 0, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.8);
 
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 30px rgba(124, 58, 237, 0.1);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.06);
+  --shadow-glow: 0 0 30px rgba(124, 58, 237, 0.08);
 
   /* Glass Specific - Light Mode */
-  --glass-bg: rgba(255, 255, 255, 0.65);
-  --glass-frost: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.1));
-  --glass-reflection: inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
-  --glass-inner-glow: inset 0 0 0 1px rgba(0, 0, 0, 0.02);
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-frost: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.2));
+  --glass-reflection: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+  --glass-inner-glow: inset 0 -1px 2px 0 rgba(0, 0, 0, 0.03);
 
-  /* Background Animation Colors - Light Pastels */
-  --bg-anim-1: rgba(102, 126, 234, 0.08);
-  --bg-anim-2: rgba(118, 75, 162, 0.08);
-  --bg-anim-3: rgba(0, 200, 150, 0.05);
-  --bg-anim-4: rgba(102, 126, 234, 0.06);
-  --bg-anim-5: rgba(124, 58, 237, 0.07);
+  /* Background Animation Colors - "Dreamy Sunset" Palette for Light Mode */
+  --bg-anim-1: rgba(255, 154, 158, 0.15); /* Peach */
+  --bg-anim-2: rgba(116, 235, 213, 0.15); /* Sky Blue */
+  --bg-anim-3: rgba(161, 140, 209, 0.12); /* Soft Lavender */
+  --bg-anim-4: rgba(251, 194, 235, 0.12); /* Candy Pink */
+  --bg-anim-5: rgba(166, 193, 238, 0.14); /* Soft Blue */
 }
 
 * {
@@ -200,6 +226,7 @@ body::before {
 /* Solid Interactive Helpers */
 .solid-btn {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 }
 
 .solid-btn:hover:not(:disabled) {
@@ -215,6 +242,7 @@ body::before {
 
 .flag-btn {
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .flag-btn:hover {
@@ -591,7 +619,7 @@ h3 {
 .compact-section-title {
   font-size: 0.65rem;
   font-weight: 600;
-  color: var(--accent-primary);
+  color: var(--accent-title);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 0.5rem;
@@ -726,7 +754,7 @@ h3 {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 1.5rem;
+  gap: 2rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
 }
@@ -1254,7 +1282,7 @@ h3 {
 .keystats-section-title {
   font-size: 0.65rem;
   font-weight: 700;
-  color: var(--accent-primary);
+  color: var(--accent-title);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 0.5rem;
@@ -1532,23 +1560,23 @@ h3 {
 }
 
 .broker-code-badge.bandar {
-  background: rgba(102, 126, 234, 0.2);
-  color: #667eea;
+  background: color-mix(in srgb, var(--broker-smartmoney) 15%, transparent);
+  color: var(--broker-smartmoney);
 }
 
 .broker-code-badge.whale {
-  background: rgba(56, 239, 125, 0.2);
-  color: #38ef7d;
+  background: color-mix(in srgb, var(--broker-whale) 15%, transparent);
+  color: var(--broker-whale);
 }
 
 .broker-code-badge.retail {
-  background: rgba(245, 87, 108, 0.2);
-  color: #f5576c;
+  background: color-mix(in srgb, var(--broker-retail) 15%, transparent);
+  color: var(--broker-retail);
 }
 
 .broker-code-badge.mix {
-  background: rgba(240, 147, 251, 0.2);
-  color: #f093fb;
+  background: color-mix(in srgb, var(--broker-mix) 15%, transparent);
+  color: var(--broker-mix);
 }
 
 .broker-type-label {
@@ -1558,19 +1586,19 @@ h3 {
 }
 
 .broker-type-label.smartmoney {
-  color: #667eea;
+  color: var(--broker-smartmoney);
 }
 
 .broker-type-label.whale {
-  color: #38ef7d;
+  color: var(--broker-whale);
 }
 
 .broker-type-label.retail {
-  color: #f5576c;
+  color: var(--broker-retail);
 }
 
 .broker-type-label.mix {
-  color: #f093fb;
+  color: var(--broker-mix);
 }
 
 .broker-type-label.unknown {
@@ -1611,11 +1639,11 @@ h3 {
 }
 
 .broker-flow-table .net-value.positive {
-  color: #38ef7d;
+  color: var(--sentiment-positive);
 }
 
 .broker-flow-table .net-value.negative {
-  color: #f5576c;
+  color: var(--sentiment-negative);
 }
 
 .broker-flow-table .consistency {
@@ -1623,8 +1651,8 @@ h3 {
 }
 
 .consistency-badge {
-  background: rgba(102, 126, 234, 0.15);
-  color: #667eea;
+  background: color-mix(in srgb, var(--broker-smartmoney) 12%, transparent);
+  color: var(--broker-smartmoney);
   padding: 2px 8px;
   border-radius: 4px;
   font-weight: 500;
@@ -1637,11 +1665,11 @@ h3 {
 }
 
 .broker-flow-table .float-pl.positive {
-  color: #38ef7d;
+  color: var(--sentiment-positive);
 }
 
 .broker-flow-table .float-pl.negative {
-  color: #f5576c;
+  color: var(--sentiment-negative);
 }
 
 /* Responsive for broker flow */

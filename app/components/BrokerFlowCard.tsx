@@ -40,7 +40,7 @@ function DailyHeatmap({ dailyData, tradingDates }: { dailyData: BrokerFlowDailyD
   
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '4px', height: `${containerHeight}px` }}>
-      <span style={{ fontSize: '0.6rem', color: '#666', minWidth: '22px' }}>D-{tradingDates.length - 1}</span>
+      <span style={{ fontSize: '0.6rem', color: 'var(--text-muted)', minWidth: '22px' }}>D-{tradingDates.length - 1}</span>
       
       <div style={{ display: 'flex', alignItems: 'center', gap: '2px', height: '100%', position: 'relative', minWidth: '120px' }}>
         {/* Baseline (x-axis) */}
@@ -50,7 +50,7 @@ function DailyHeatmap({ dailyData, tradingDates }: { dailyData: BrokerFlowDailyD
           right: 0, 
           top: `${midPoint}px`, 
           height: '2px', 
-          background: 'rgba(255,255,255,0.08)',
+          background: 'var(--border-color)',
           borderRadius: '1px'
         }} />
         
@@ -70,7 +70,7 @@ function DailyHeatmap({ dailyData, tradingDates }: { dailyData: BrokerFlowDailyD
                   height: `${Math.max(2, barHeight)}px`,
                   bottom: isPositive ? `${midPoint}px` : 'auto',
                   top: !isPositive ? `${midPoint}px` : 'auto',
-                  backgroundColor: isPositive ? '#38ef7d' : '#f5576c',
+                  backgroundColor: isPositive ? 'var(--sentiment-positive)' : 'var(--sentiment-negative)',
                   borderRadius: '1px',
                   opacity: data ? 1 : 0.2,
                   zIndex: 1,
@@ -83,7 +83,7 @@ function DailyHeatmap({ dailyData, tradingDates }: { dailyData: BrokerFlowDailyD
         })}
       </div>
       
-      <span style={{ fontSize: '0.6rem', color: '#666', minWidth: '18px' }}>D0</span>
+      <span style={{ fontSize: '0.6rem', color: 'var(--text-muted)', minWidth: '18px' }}>D0</span>
     </div>
   );
 }

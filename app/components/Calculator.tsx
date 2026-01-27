@@ -416,8 +416,7 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
             {/* Emiten History Card - Full Width */}
             <div style={{
               gridColumn: '1 / -1',
-              width: '100%',
-              marginTop: '1rem'
+              width: '100%'
             }}>
               <EmitenHistoryCard emiten={result.input.emiten} />
             </div>
@@ -426,9 +425,8 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
             <div style={{
               gridColumn: '1 / -1',
               width: '100%',
-              marginTop: '1rem',
               display: 'flex',
-              gap: '1.5rem',
+              gap: '2rem',
               flexWrap: 'wrap',
               alignItems: 'stretch'
             }}>
@@ -441,7 +439,7 @@ export default function Calculator({ selectedStock }: CalculatorProps) {
             </div>
 
             {/* Agent Story Section - Full Width */}
-            <div style={{ gridColumn: '1 / -1', marginTop: '0', width: '100%' }}>
+            <div style={{ gridColumn: '1 / -1', width: '100%' }}>
               {(agentStories.length > 0 || storyStatus !== 'idle') && (
                 <AgentStoryCard
                   stories={agentStories}

@@ -176,7 +176,7 @@ export default function AgentStoryCard({ stories, status, onRetry }: AgentStoryC
                     <td style={{ padding: '0.5rem', color: 'var(--text-secondary)' }}>
                       {renderWithLinks(item.logika_ekonomi_pasar)}
                     </td>
-                    <td style={{ padding: '0.5rem', color: 'var(--accent-primary)' }}>
+                    <td style={{ padding: '0.5rem', color: 'var(--story-impact)' }}>
                       {renderWithLinks(item.potensi_dampak_harga)}
                     </td>
                   </tr>

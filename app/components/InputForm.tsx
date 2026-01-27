@@ -243,6 +243,7 @@ export default function InputForm({
                 background: '#4f46e5', // Solid shade for Analyze
                 color: 'white',
                 border: '1px solid #4f46e5',
+                cursor: 'pointer',
                 opacity: hasResult ? 1 : 0.5,
                 pointerEvents: hasResult ? 'auto' : 'none',
                 whiteSpace: 'nowrap',
@@ -328,9 +329,9 @@ export default function InputForm({
                 justifyContent: 'center',
                 borderRadius: '8px',
                 cursor: 'pointer',
-                background: currentFlag === 'Neutral' ? 'var(--text-secondary)' : 'rgba(255, 255, 255, 0.05)',
+                background: currentFlag === 'Neutral' ? 'var(--text-secondary)' : 'var(--glass-inner-glow)',
                 color: currentFlag === 'Neutral' ? 'white' : 'var(--text-secondary)',
-                border: `1px solid ${currentFlag === 'Neutral' ? 'var(--text-secondary)' : 'rgba(255, 255, 255, 0.1)'}`,
+                border: `1px solid ${currentFlag === 'Neutral' ? 'var(--text-secondary)' : 'var(--border-color)'}`,
                 boxShadow: currentFlag === 'Neutral' ? '0 4px 10px rgba(0, 0, 0, 0.1)' : 'none'
               }}
             >

@@ -60,7 +60,7 @@ export default function BrokerSummaryCard({ emiten, dateRange, brokerSummary, se
         <div>
           <div className="compact-ticker">+ {emiten.toUpperCase()}</div>
           {sector && (
-            <div style={{ fontSize: '0.7rem', color: '#999', marginTop: '2px' }}>
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '2px' }}>
               {sector}
             </div>
           )}
@@ -69,7 +69,7 @@ export default function BrokerSummaryCard({ emiten, dateRange, brokerSummary, se
           <div style={{ 
             fontSize: '0.85rem', 
             fontWeight: 800, 
-            color: '#666',
+            color: 'var(--text-muted)',
             textTransform: 'uppercase',
             letterSpacing: '1px',
             marginBottom: '4px',
