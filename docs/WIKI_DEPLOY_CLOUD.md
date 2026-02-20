@@ -1,4 +1,4 @@
-# OPSI A: Deploy ke Cloud (Netlify + Supabase)
+# OPSI A: Deploy ke Cloud (Netlify + Supabase) xxx
 
 Ikuti langkah-langkah berikut secara berurutan untuk menjalankan Adimology di cloud menggunakan Netlify dan Supabase.
 
