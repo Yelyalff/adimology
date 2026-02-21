@@ -1534,6 +1534,20 @@ h3 {
   letter-spacing: 0.5px;
 }
 
+.broker-flow-source-link {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-top: 2px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.broker-flow-source-link:hover {
+  color: var(--accent-primary);
+  text-shadow: 0 0 10px rgba(124, 58, 237, 0.3);
+}
+
 .broker-flow-filters {
   display: flex;
   gap: 4px;
